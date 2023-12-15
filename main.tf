@@ -17,7 +17,7 @@ data "aws_ami" "app_ami" {
 resource "aws_instance" "blog" {
   ami           = data.aws_ami.app_ami.id
   instance_type = var.instance_type
-  vpc_security_group_ids = [module.module_security_group.id]
+  vpc_security_group_ids = [module.module_security_group.security_group_id]
 
   tags = {
     Name = "HelloWorld"
@@ -28,7 +28,7 @@ module "module_security_group" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "5.1.0"
   
-  vpc_id = aws_vpc.blog_vpc.id
+  vpc_id = data.aws_vpc.blog_vpc.id
 
   name                = "blog_module_sg"
   egress_rules        = ["all-all"]
